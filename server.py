@@ -1,21 +1,22 @@
-from mcp.server.fastmcp import FastMCP
-import os
+from fastmcp import FastMCP
 import uvicorn
 
-mcp = FastMCP("HTTP Server", "0.1.0")
+# Create the FastMCP instance
+fast_mcp = FastMCP("HTTP Server", "0.1.0")
 
-
-@mcp.tool()
+@fast_mcp.tool()
 def greeting(name: str) -> str:
     """
     Returns a greeting message for the given name.
     """
     return f"Hello, {name}!"
 
+# Expose the ASGI app for uvicorn to find
+mcp = fast_mcp.http_app()
 
 if __name__ == "__main__":
-        uvicorn.run(
-        mcp,  # Pass the FastMCP instance directly if it implements ASGI, or replace with the correct attribute
+    uvicorn.run(
+        mcp,  # Use the exposed ASGI app
         host="0.0.0.0",
         port=8000,
         log_level="info"
