@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 import os
+import uvicorn
 
 mcp = FastMCP("HTTP Server", "0.1.0")
 
@@ -13,4 +14,9 @@ def greeting(name: str) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(transport="streamable-http", host="0.0.0.0", port=int(os.environ.get("PORT", 8000))) # type: ignore
+        uvicorn.run(
+        mcp,  # Pass the FastMCP instance directly if it implements ASGI, or replace with the correct attribute
+        host="0.0.0.0",
+        port=8000,
+        log_level="info"
+    )
